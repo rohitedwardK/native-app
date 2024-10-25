@@ -41,14 +41,6 @@ const App = () => {
   }, []);
   
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator initialRouteName="LoginIn"
-    //    screenOptions={{ headerShown: false }}>
-    //     <Stack.Screen name="LoginIn" component={LoginScreen} />
-    //     <Stack.Screen name="AdminScreen" component={AdminScreen} />
-    //     <Stack.Screen name="Main" component={AppNavigator} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login"
        screenOptions={{ headerShown: false }}>
