@@ -1,8 +1,10 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+
 import { getFirestore, initializeFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { initializeApp } from 'firebase/app';
+import { getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { reactAppConfig } from './environment';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Firebase config from environment
 export const firebaseConfig = {
@@ -15,7 +17,7 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase App once
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 
 // Firestore initialization with long polling enabled (if required)
 export const database = initializeFirestore(firebaseApp, {
@@ -29,4 +31,23 @@ export const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 
 // Firebase Auth
-export const auth = getAuth(firebaseApp);
+// export const auth = getAuth(firebaseApp);
+
+export const auth = initializeAuth(firebaseApp, {
+  persistence: getReactNativePersistence(AsyncStorage), // Ensure persistence using AsyncStorage
+});
+// export const auth = initializeAuth(firebaseApp, {
+//   persistence: getReactNativePersistence(AsyncStorage)
+// });
+// Initialize Firebase
+// const app = initializeApp(firebaseConfig);
+// export const auth = getAuth(firebaseApp);
+
+// Set persistence
+// setPersistence(auth, getReactNativePersistence(AsyncStorage))
+//   .then(() => {
+//     // Now you can sign in or do other operations
+//   })
+//   .catch((error) => {
+//     console.error("Error setting persistence: ", error);
+//   });

@@ -3,9 +3,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import './src/firebase/firebase'; // Importing firebase.tsx for initialization
 import LoginScreen from './src/screens/LoginScreen';
-import AdminScreen from './src/screens/AdminScreen';
-import AppNavigator from './src/navigation/appNavigation';
+import AppNavigator from './src/navigation/AppNavigation';
 import AuthService from './src/auth/AuthService';
+import AdminNavigator from './src/navigation/AdminNavigation';
 
 const Stack = createStackNavigator();
 
@@ -19,13 +19,10 @@ const App = () => {
       setLoading(true);
       
       // Check if user is logged in and fetch the user's role
-      const user = await AuthService.getCurrentUser();
+      const user = await AuthService.getLoggedInUserInfo();
       if (user) {
-        const role = await AuthService.getUserRole(user.uid); // Fetch the user role from your service
-        setIsAdmin(role === 'admin');
+        setIsAdmin(user.role === 'admin');
         setIsLoggedIn(true);
-      } else {
-        setIsLoggedIn(false);
       }
       setLoading(false);
     };
@@ -34,20 +31,13 @@ const App = () => {
   }, []);
   
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator initialRouteName="LoginIn"
-    //    screenOptions={{ headerShown: false }}>
-    //     <Stack.Screen name="LoginIn" component={LoginScreen} />
-    //     <Stack.Screen name="AdminScreen" component={AdminScreen} />
-    //     <Stack.Screen name="Main" component={AppNavigator} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
     <NavigationContainer>
-      {user ? (
-        isAdmin ? <AdminTabs /> : <UserTabs /> // Render admin or user tabs based on role
-      ) : (
-        <LoginScreen /> // If not logged in, show the login screen
-      )}
+      <Stack.Navigator initialRouteName="Login"
+       screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Admin Dashboard" component={AdminNavigator} />
+        <Stack.Screen name="User Dashboard" component={AppNavigator} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
