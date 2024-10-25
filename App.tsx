@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import './src/firebase/firebase'; // Importing firebase.tsx for initialization
 import LoginScreen from './src/screens/LoginScreen';
+import AdminScreen from './src/screens/AdminScreen';
 import AppNavigator from './src/navigation/AppNavigation';
 import AuthService from './src/auth/AuthService';
 import AdminNavigator from './src/navigation/AdminNavigation';
@@ -24,6 +25,15 @@ const App = () => {
         setIsAdmin(user.role === 'admin');
         setIsLoggedIn(true);
       }
+      
+
+      // if (user) {
+      //   const role = await AuthService.getUserRole(user.uid); // Fetch the user role from your service
+      //   setIsAdmin(role === 'admin');
+      //   setIsLoggedIn(true);
+      // } else {
+      //   setIsLoggedIn(false);
+      // }
       setLoading(false);
     };
 
@@ -39,6 +49,9 @@ const App = () => {
         <Stack.Screen name="User Dashboard" component={AppNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
+    // <NavigationContainer>
+    //    {isLoggedIn ? ( isAdmin ? <AdminTabs /> : <AppNavigator /> ) : ( <LoginScreen /> )}
+    // </NavigationContainer>
   );
 };
 

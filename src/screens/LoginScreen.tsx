@@ -6,8 +6,12 @@ import { getAuth, getReactNativePersistence, GoogleAuthProvider, initializeAuth,
 import { firebaseApp, firebaseConfig } from '../firebase/firebase';
 import { signInAndFetchUserData } from '../services/loginService';
 import { useNavigation } from '@react-navigation/native';
+import { signInWithPopup } from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// const auth = initializeAuth(app, {
+//   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+// });
 // Configure Google Sign-In
 GoogleSignin.configure({
   webClientId: firebaseConfig.apiKey,
@@ -24,6 +28,11 @@ const LoginScreen = () => {
       });
 
   const onGoogleButtonPress = async () => {
+    const auth = Platform.OS === 'web' 
+    ? getAuth() 
+    : initializeAuth(firebaseApp, {
+        persistence: getReactNativePersistence(AsyncStorage),
+      });
     let user = null;
 
     if (Platform.OS === 'web') {
