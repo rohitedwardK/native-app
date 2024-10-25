@@ -2,14 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, ImageBackground } from 'react-native';
 import InvestScreen from './InvestScreen';
 import SubsPlans from '../components/SubsPlans';
+import AuthService from '../auth/AuthService';
 // Import the background image from the assets folder
 const backgroundImage = require('../../assets/app-bg-grey.png');
 
 export default function HomeScreen() {
-  const userName = 'ABC'; // Replace with dynamic user name if available
+  let userName = 'ABC'; // Replace with dynamic user name if available
   const investedAmount = '5,50,000'; // Replace with dynamic invested value
   const currentValue = '6,50,000'; // Replace with dynamic current value
   const returnPercentage = ((parseInt(currentValue) - parseInt(investedAmount)) / parseInt(investedAmount)) * 100;
+
+  let user = AuthService.getLoggedInUserInfo();
 
   return (
     <ImageBackground
@@ -20,7 +23,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       {/* Welcome and Greeting Section */}
       <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeText}>Hello, {userName}</Text>
+        <Text style={styles.welcomeText}>Hello, {user ? user.displayName : userName}</Text>
         <Text style={styles.greetingText}>Good Evening</Text>
       </View>
 

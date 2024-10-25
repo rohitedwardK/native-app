@@ -78,6 +78,7 @@ export const adminRedirection = async (userRole) => {
     console.log(userRole);
     const navigation = useNavigation<any>(); // Access navigation
   if (userRole === 'admin') {
+    
     navigation.replace('HomeScreen'); // Redirect to Admin Screen if the user is an admin
   } else {
     navigation.replace('Main'); // Redirect to Home Screen for regular users

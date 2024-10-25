@@ -8,7 +8,9 @@ import { fetchUsers } from '../firebase/firebaseService';
 import { signInAndFetchUserData } from '../services/loginService';
 import AuthService from '../auth/AuthService';
 import { useNavigation } from '@react-navigation/native';
-
+// const auth = initializeAuth(app, {
+//   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+// });
 // Configure Google Sign-In
 GoogleSignin.configure({
   webClientId: firebaseConfig.apiKey, // Make sure this is the correct web client ID
@@ -36,11 +38,18 @@ const LoginScreen = () => {
           console.log('role', info);
           if (info.role === 'admin') {
             setLoadingScreen(false);
-            navigation.replace('AdminScreen'); // Redirect to Admin Screen if the user is an admin
+            navigation.replace('Admin Dashboard'); // Redirect to Admin Screen
           } else {
             setLoadingScreen(false);
-            navigation.replace('Main'); // Redirect to Home Screen for regular users
+            navigation.replace('User Dashboard'); // Redirect to User Dashboard
           }
+          // if (info.role === 'admin') {
+          //   setLoadingScreen(false);
+          //   navigation.replace('AdminScreen'); // Redirect to Admin Screen if the user is an admin
+          // } else {
+          //   setLoadingScreen(false);
+          //   navigation.replace('Main'); // Redirect to Home Screen for regular users
+          // }
         })
         // Call the function to get schema
       } catch (error) {
@@ -56,11 +65,11 @@ const LoginScreen = () => {
       console.log(response);
 
       // Access the idToken from the response
-      const idToken = response.data.idToken;
+      const idToken = response.idToken;
         const googleCredential = GoogleAuthProvider.credential(idToken);
         const result = await signInWithCredential(auth, googleCredential);
         user = result.user;
-        console.log("Signed in with Google on Mobile");
+        console.log("Signed in with Google on Mobile", user);
         
       } catch (error) {
         console.error("Mobile Google Sign-In error: ", error);

@@ -11,24 +11,20 @@ const AdminScreen = () => {
     const user = AuthService.getLoggedInUserInfo();
      
   return (
-    <View>
-        <ImageBackground
-        source={backgroundImage} // Use image from assets
-        style={styles.backgroundImage} // Apply only valid styles here
-        resizeMode="cover" // Use resizeMode directly on ImageBackground
-        >
-            <Text style={styles.loadingText}>Admin Screen</Text>
-            <View style={styles.container}>
-                {/* Welcome and Greeting Section */}
-                
-                <View style={styles.welcomeSection}>
-                    <Text style={styles.welcomeText}>Hello, {user.displayName}</Text>
-                    <Text style={styles.greetingText}>Good Evening</Text>
-                </View>
+    <ImageBackground
+    source={backgroundImage} // Use image from assets
+    style={styles.backgroundImage} // Apply only valid styles here
+    resizeMode="cover" // Use resizeMode directly on ImageBackground
+    >
+        <View style={styles.container}>
+            {/* Welcome and Greeting Section */}
+            
+            <View style={styles.welcomeSection}>
+                <Text style={styles.welcomeText}>Hello, {user.displayName}</Text>
+                <Text style={styles.greetingText}>Good Evening</Text>
             </View>
-        </ImageBackground>
-        <BottomTabNav></BottomTabNav>
-    </View>
+        </View>
+    </ImageBackground>
   );
 };
 
