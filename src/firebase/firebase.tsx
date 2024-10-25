@@ -1,8 +1,10 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+
+import { reactAppConfig } from './environment';
 import { getFirestore, initializeFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { reactAppConfig } from './environment';
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+
 
 // Firebase config from environment
 export const firebaseConfig = {
@@ -15,7 +17,7 @@ export const firebaseConfig = {
 };
 
 // Initialize Firebase App once
-const firebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 
 // Firestore initialization with long polling enabled (if required)
 export const database = initializeFirestore(firebaseApp, {

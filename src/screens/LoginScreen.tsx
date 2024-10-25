@@ -2,13 +2,18 @@
 import React, { useState } from 'react';
 import { View, Platform, Text, StyleSheet, Pressable, Image, ActivityIndicator } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { getAuth, GoogleAuthProvider, signInWithCredential, signInWithPopup } from 'firebase/auth'; // Import Firebase auth methods
-import { firebaseConfig } from '../firebase/firebase';
+import { getAuth, getReactNativePersistence, GoogleAuthProvider, initializeAuth, signInWithCredential } from 'firebase/auth'; // Import Firebase auth methods
+import { firebaseApp, firebaseConfig } from '../firebase/firebase';
 import { fetchUsers } from '../firebase/firebaseService';
 import { signInAndFetchUserData } from '../services/loginService';
 import AuthService from '../auth/AuthService';
 import { useNavigation } from '@react-navigation/native';
+import { signInWithPopup } from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// const auth = initializeAuth(app, {
+//   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
+// });
 // Configure Google Sign-In
 GoogleSignin.configure({
   webClientId: firebaseConfig.apiKey, // Make sure this is the correct web client ID
@@ -20,7 +25,11 @@ const LoginScreen = () => {
   const [loadingScreen, setLoadingScreen] = useState(false);
 
   const onGoogleButtonPress = async () => {
-    const auth = getAuth();
+    const auth = Platform.OS === 'web' 
+    ? getAuth() 
+    : initializeAuth(firebaseApp, {
+        persistence: getReactNativePersistence(AsyncStorage),
+      });
     let user = null;
     if (Platform.OS === 'web') {
       // Web-based Google Sign-In using Firebase Auth
@@ -36,11 +45,18 @@ const LoginScreen = () => {
           console.log('role', info);
           if (info.role === 'admin') {
             setLoadingScreen(false);
-            navigation.replace('AdminScreen'); // Redirect to Admin Screen if the user is an admin
+            navigation.replace('Admin Dashboard'); // Redirect to Admin Screen
           } else {
             setLoadingScreen(false);
-            navigation.replace('Main'); // Redirect to Home Screen for regular users
+            navigation.replace('User Dashboard'); // Redirect to User Dashboard
           }
+          // if (info.role === 'admin') {
+          //   setLoadingScreen(false);
+          //   navigation.replace('AdminScreen'); // Redirect to Admin Screen if the user is an admin
+          // } else {
+          //   setLoadingScreen(false);
+          //   navigation.replace('Main'); // Redirect to Home Screen for regular users
+          // }
         })
         // Call the function to get schema
       } catch (error) {
@@ -60,7 +76,7 @@ const LoginScreen = () => {
         const googleCredential = GoogleAuthProvider.credential(idToken);
         const result = await signInWithCredential(auth, googleCredential);
         user = result.user;
-        console.log("Signed in with Google on Mobile");
+        console.log("Signed in with Google on Mobile", user);
         
       } catch (error) {
         console.error("Mobile Google Sign-In error: ", error);
